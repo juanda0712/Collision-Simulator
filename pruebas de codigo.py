@@ -25,8 +25,9 @@ class StartPage(tk.Canvas):
 class Simulator(tk.Canvas):
     def __init__(self, master):
         tk.Canvas.__init__(self, master)
-        tk.Canvas.config(self,bg="blue",height=600,width=600)
+        tk.Canvas.config(self,bg="black",height=600,width=600)
         tk.Label(self, text="SIMULADOR", font=('Helvetica', 18, "bold")).place(x=280,y=300)
+        tk.
 
 
 
@@ -34,4 +35,5 @@ class Simulator(tk.Canvas):
 if __name__ == "__main__" :
     root = CreateRoot()
     root.resizable(False,False)
+    root.title("Collision Simulator")
     root.mainloop()
