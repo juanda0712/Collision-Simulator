@@ -38,58 +38,56 @@ class Simulator(tk.Canvas):
         tk.Canvas.create_line(self,550,0,550,530,fill='white',width=10)
         tk.Canvas.create_line(self,300,0,300,530,fill='white',width=10,dash=255)
 
-        #class calls#
-        car1 = Car()      #Instance Class Car
-        car1.create_main_car(self)
 
-        """K = Highway()
-        K.create_highway(self)"""
 
+        c1 = Car(self)
+        c2 = RandomCar(self)
         #Move the principal car
-        def move_main_car():
-            car1.create_main_car(self)
-            circle_thread = Thread(target=car1.move_up)
-            circle_thread.daemon = True
-            circle_thread.start()
+        def start_animation():
+
+            main_car = Thread(target=c1.move_main)
+            main_car.daemon = True
+            main_car.start()
+
+            
+            main_car1 = Thread(target=c2.create_prob)
+            main_car1.daemon = True
+            main_car1.start()
 
         #Buttons#
-        tk.Button(self, text="Iniciar", font=("fixedsys", "15"), bg="yellow", command=move_main_car).place(x=10,y=565)
+        tk.Button(self, text="Iniciar", font=("fixedsys", "15"), bg="yellow", command=start_animation).place(x=10,y=565)
 
 
 #Class  Car#
 class Car():
-    def __init__(self):
-        self.x= 320
-        self.y= 330
-        self.x1= 500
-        self.y1= 500 
-        self.speed= None
-        self.falling = True
-        
-    def create_main_car(self,canvas):
-        canvas.create_rectangle(self.x,self.y,self.x1,self.y1,fill="red")
+    def __init__(self,canvas):
+        self.canvas = canvas
+        self.x1,self.y1 = 320,400
+        self.x01,self.y01 =450,500
+        self.moving = True
+        self.maincar = canvas.create_rectangle(self.x1,self.y1,self.x01,self.y01,fill="red")
     
-    def move_up(self):
-        while self.falling:
-            
-            if self.y != 0:
-                self.y -= 1
-                self.y1 -= 1
-            else:
-                self.falling = False
-            time.sleep(0.02)
-                
+    def move_main(self):  #  self.canvas (canvas)     #self.maincar (objeto rectagulo)
+        while self.y1 > 10:
+            if self.moving:
+                self.canvas.move(self.maincar,0,-2)
+            self.y1 -= 1
+            time.sleep(0.08)
 
-
-"""class Highway():
-    def __init__(self):
-        self.x = 300
-        self.y = 300
-
-    def create_highway(self,canvas):
-        canvas.create_rectangle(self.x,self.y,200,200,fill="yellow")"""
+class RandomCar():
+    
+    def __init__(self,canvas):
+        self.canvas = canvas
+        self.x1,self.y1 = 200,20
+        self.x01,self.y01 =300,100    
+       
+    def create_prob(self):
+        self.prob =  random.randint(0,1)
+        if self.prob == 1:
+            self.car = self.canvas.create_rectangle(self.x1,self.y1,self.x01,self.y01,fill="red")
         
-
+        
+          
 if __name__ == "__main__" :
     root = CreateRoot()
     root.resizable(False,False)
